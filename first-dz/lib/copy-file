@@ -1,0 +1,27 @@
+const fs = require('fs');
+const path = require('path');
+
+const createFolder = (dist) => {
+    try {
+        fs.statSync(dist);
+    } catch(err) {
+        if (err.code === 'ENOENT') fs.mkdirSync(dist, 0o755);
+    }
+};
+
+const copyFile = (files, dist, callback = () => {}) => {
+    createFolder(dist);
+    files.forEach(file => {
+        let copyDist = path.join(dist, file.folderName);
+        let newDir = path.join(copyDist, file.name);
+        createFolder(copyDist);
+        if (!fs.existsSync(newDir)) {
+            fs.link(file.dist, newDir, error => {
+                if (error) return callback(error);
+            });
+        }
+    })
+
+};
+
+module.exports = copyFile;
