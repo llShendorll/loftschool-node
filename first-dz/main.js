@@ -30,8 +30,12 @@ function call(value, callback = () => {}) {
                         console.log(error);
                         process.exit(1);
                     }
-                    call('Удалить файл? (Yes/No): ', (response) => {
-
+                    call('Удалить файлы? (Yes/No): ', (response) => {
+                        if (response === 'yes') {
+                            deletedFiles(source)
+                        } else {
+                            console.log('nooooooooop')
+                        }
                     });
                 });
             })

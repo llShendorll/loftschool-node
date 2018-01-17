@@ -9,19 +9,19 @@ const createFolder = (dist) => {
     }
 };
 
-const copyFile = (files, dist, callback = () => {}) => {
-    createFolder(dist);
-    files.forEach(file => {
+const copyFile = async (files, dist, callback = () => {}) => {
+    await createFolder(dist);
+    await files.forEach(async file => {
         let copyDist = path.join(dist, file.folderName);
         let newDir = path.join(copyDist, file.name);
         createFolder(copyDist);
-        if (!fs.existsSync(newDir)) {
+        if (!await fs.existsSync(newDir)) {
             fs.link(file.dist, newDir, error => {
                 if (error) return callback(error);
             });
         }
-    })
-
+    });
+    return callback(null, 'ok');
 };
 
 module.exports = copyFile;
